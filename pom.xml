@@ -441,6 +441,9 @@ limitations under the License.
                   <exclude>.repository/</exclude>
                   <exclude>**/*.diff</exclude>
                   <exclude>**/*.patch</exclude>
+                  <exclude>cloudera/*</exclude>
+                  <!-- Exclude buildinfo files from RAT, since they're only used for CDH unit test aggregation. -->
+                  <exclude>*buildinfo</exclude>
                 </excludes>
               </configuration>
             </execution>
