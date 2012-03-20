@@ -107,7 +107,7 @@ limitations under the License.
         </property>
       </activation>
       <properties>
-        <hadoop.version>0.23.1</hadoop.version>
+        <hadoop.version>${cdh.hadoop.version}</hadoop.version>
         <hadoop.common.artifact.id>hadoop-common</hadoop.common.artifact.id>
       </properties>
       <dependencyManagement>
