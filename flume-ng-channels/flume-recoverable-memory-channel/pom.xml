@@ -24,12 +24,12 @@
   <parent>
     <artifactId>flume-ng-channels</artifactId>
     <groupId>org.apache.flume</groupId>
-    <version>1.1.0-cdh4b2-SNAPSHOT</version>
+    <version>1.2.0-incubating-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.flume.flume-ng-channels</groupId>
-  <artifactId>flume-file-channel</artifactId>
-  <name>Flume NG file-based channel</name>
+  <artifactId>flume-recoverable-memory-channel</artifactId>
+  <name>Flume NG file backed Memory channel</name>
 
   <build>
     <plugins>
