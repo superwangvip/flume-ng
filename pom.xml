@@ -76,6 +76,12 @@ limitations under the License.
             <groupId>org.apache.hadoop</groupId>
             <artifactId>${hadoop.common.artifact.id}</artifactId>
             <version>${hadoop.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>com.cloudera.cdh</groupId>
+                <artifactId>hadoop-ant</artifactId>
+              </exclusion>
+            </exclusions>
           </dependency>
         </dependencies>
       </dependencyManagement>
@@ -654,15 +660,27 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase</artifactId>
-        <version>0.92.1</version>
+        <version>${cdh.hbase.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.cloudera.cdh</groupId>
+            <artifactId>zookeeper-ant</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase</artifactId>
-        <version>0.92.1</version>
+        <version>${cdh.hbase.version}</version>
         <classifier>tests</classifier>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>com.cloudera.cdh</groupId>
+            <artifactId>zookeeper-ant</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
