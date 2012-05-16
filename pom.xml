@@ -83,6 +83,11 @@ limitations under the License.
               </exclusion>
             </exclusions>
           </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-test</artifactId>
+            <version>${hadoop.version}</version>
+          </dependency>
         </dependencies>
       </dependencyManagement>
     </profile>
@@ -115,6 +120,12 @@ limitations under the License.
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-auth</artifactId>
             <version>${hadoop.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-minicluster</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>test</scope>
           </dependency>
         </dependencies>
       </dependencyManagement>
@@ -693,13 +704,6 @@ limitations under the License.
         <groupId>org.apache.hadoop</groupId>
         <artifactId>hadoop</artifactId>
         <version>${hadoop.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.hadoop</groupId>
-        <artifactId>hadoop-test</artifactId>
-        <version>${hadoop.version}</version>
-        <scope>test</scope>
       </dependency>
 
       <!-- internal module dependencies -->
