@@ -50,6 +50,7 @@
       <binaries>
         <unpack>false</unpack>
         <outputDirectory>lib</outputDirectory>
+        <outputFileNameMapping>${module.artifactId}-${project.version}${dashClassifier?}.${module.extension}</outputFileNameMapping>
 
         <dependencySets>
           <dependencySet>
