@@ -114,6 +114,7 @@
         <include>conf/**</include>
         <include>pom.xml</include>
         <include>cloudera/**</include>
+        <include>flume-ng-doc/**</include>
       </includes>
     </fileSet>
 
