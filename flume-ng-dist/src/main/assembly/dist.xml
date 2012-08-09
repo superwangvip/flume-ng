@@ -50,6 +50,7 @@
       <binaries>
         <unpack>false</unpack>
         <outputDirectory>lib</outputDirectory>
+        <outputFileNameMapping>${module.artifactId}-${project.version}${dashClassifier?}.${module.extension}</outputFileNameMapping>
 
         <dependencySets>
           <dependencySet>
@@ -111,6 +112,7 @@
         <include>bin/**</include>
         <include>conf/**</include>
         <include>pom.xml</include>
+        <include>cloudera/**</include>
         <include>flume-ng-doc/**</include>
         <include>flume-ng-tests/**</include>
       </includes>
