@@ -110,6 +110,7 @@
         <include>bin/**</include>
         <include>conf/**</include>
         <include>pom.xml</include>
+        <include>cloudera/**</include>
         <include>flume-ng-doc/**</include>
         <include>flume-ng-tests/**</include>
       </includes>
