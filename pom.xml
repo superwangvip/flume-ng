@@ -19,15 +19,15 @@ limitations under the License.
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <parent>
-    <groupId>org.apache</groupId>
-    <artifactId>apache</artifactId>
-    <version>9</version>
+    <groupId>com.cloudera.cdh</groupId>
+    <artifactId>cdh-root</artifactId>
+    <version>4.1.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.apache.flume</groupId>
   <artifactId>flume-parent</artifactId>
-  <version>1.3.0</version>
+  <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Apache Flume</name>
@@ -77,6 +77,12 @@ limitations under the License.
             <groupId>org.apache.hadoop</groupId>
             <artifactId>${hadoop.common.artifact.id}</artifactId>
             <version>${hadoop.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>com.cloudera.cdh</groupId>
+                <artifactId>hadoop-ant</artifactId>
+              </exclusion>
+            </exclusions>
           </dependency>
           <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -96,8 +102,7 @@ limitations under the License.
         </property>
       </activation>
       <properties>
-        <hadoop.version>2.0.0-alpha</hadoop.version>
-        <hbase.version>0.94.2</hbase.version>
+        <hadoop.version>${cdh.hadoop.version}</hadoop.version>
         <hadoop.common.artifact.id>hadoop-common</hadoop.common.artifact.id>
       </properties>
       <dependencyManagement>
@@ -131,6 +136,12 @@ limitations under the License.
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-auth</artifactId>
             <version>${hadoop.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-minicluster</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>test</scope>
           </dependency>
         </dependencies>
       </dependencyManagement>
@@ -408,6 +419,27 @@ limitations under the License.
   </pluginRepositories>
 
   <repositories>
+     <repository>
+      <id>cdh.repo</id>
+      <url>https://repository.cloudera.com/artifactory/cloudera-repos</url>
+      <name>Cloudera Repositories</name>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    
+    <repository>
+      <id>cdh.snapshots.repo</id>
+      <url>https://repository.cloudera.com/artifactory/libs-snapshot-local</url>
+      <name>Cloudera Snapshots Repository</name>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+
     <repository>
       <id>repo1.maven.org</id>
       <url>http://repo1.maven.org/maven2</url>
@@ -431,11 +463,13 @@ limitations under the License.
   </repositories>
 
   <distributionManagement>
+    <!--
     <repository>
       <id>apache.staging.https</id>
       <name>Apache Staging Repository</name>
       <url>https://repository.apache.org/service/local/staging/deploy/maven2/</url>
     </repository>
+    -->
     <site>
       <id>apache.website</id>
       <url>${siteUrlDeployment}</url>
@@ -528,6 +562,9 @@ limitations under the License.
                   <exclude>.repository/</exclude>
                   <exclude>**/*.diff</exclude>
                   <exclude>**/*.patch</exclude>
+                  <exclude>cloudera/*</exclude>
+                  <!-- Exclude buildinfo files from RAT, since they're only used for CDH unit test aggregation. -->
+                  <exclude>*buildinfo</exclude>
                   <exclude>**/*.avsc</exclude>
                   <exclude>**/docs/**</exclude>
                 </excludes>
@@ -646,7 +683,7 @@ limitations under the License.
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>10.0.1</version>
+        <version>11.0.2</version>
       </dependency>
 
       <dependency>
@@ -812,15 +849,27 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase</artifactId>
-        <version>${hbase.version}</version>
+        <version>${cdh.hbase.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.cloudera.cdh</groupId>
+            <artifactId>zookeeper-ant</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
         <groupId>org.apache.hbase</groupId>
         <artifactId>hbase</artifactId>
-        <version>${hbase.version}</version>
+        <version>${cdh.hbase.version}</version>
         <classifier>tests</classifier>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>com.cloudera.cdh</groupId>
+            <artifactId>zookeeper-ant</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
@@ -849,90 +898,90 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.flume</groupId>
         <artifactId>flume-ng-configuration</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.apache.flume</groupId>
         <artifactId>flume-ng-core</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume</groupId>
         <artifactId>flume-ng-node</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-channels</groupId>
         <artifactId>flume-file-channel</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-channels</groupId>
         <artifactId>flume-jdbc-channel</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
      <dependency>
        <groupId>org.apache.flume.flume-ng-channels</groupId>
        <artifactId>flume-recoverable-memory-channel</artifactId>
-       <version>1.3.0</version>
+       <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
      </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-sinks</groupId>
         <artifactId>flume-hdfs-sink</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-sinks</groupId>
         <artifactId>flume-irc-sink</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-sinks</groupId>
         <artifactId>flume-ng-hbase-sink</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-sinks</groupId>
         <artifactId>flume-ng-elasticsearch-sink</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-sources</groupId>
         <artifactId>flume-scribe-source</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-legacy-sources</groupId>
         <artifactId>flume-thrift-source</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-legacy-sources</groupId>
         <artifactId>flume-avro-source</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume</groupId>
         <artifactId>flume-ng-sdk</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.flume.flume-ng-clients</groupId>
         <artifactId>flume-ng-log4jappender</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.0-cdh4.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
