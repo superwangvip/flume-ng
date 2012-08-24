@@ -556,7 +556,7 @@ limitations under the License.
             <stringType>String</stringType>
           </configuration>
           -->
-          <version>1.7.1</version>
+          <version>${cdh.avro.version}</version>
         </plugin>
 
         <plugin>
@@ -680,19 +680,19 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.avro</groupId>
         <artifactId>avro</artifactId>
-        <version>1.7.2</version>
+        <version>${cdh.avro.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.avro</groupId>
         <artifactId>avro-compiler</artifactId>
-        <version>1.7.2</version>
+        <version>${cdh.avro.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.avro</groupId>
         <artifactId>avro-ipc</artifactId>
-        <version>1.7.2</version>
+        <version>${cdh.avro.version}</version>
         <exclusions>
           <exclusion>
             <groupId>org.mortbay.jetty</groupId>
