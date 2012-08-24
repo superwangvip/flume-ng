@@ -46,7 +46,7 @@ limitations under the License.
     <siteUrlDeployment>file://people.apache.org/www/incubator.apache.org/flume</siteUrlDeployment>
     <stagingDirectory>${project.basedir}/target/docs</stagingDirectory>
 
-    <avro.version>1.7.3</avro.version>
+    <avro.version>${cdh.avro.version}</avro.version>
     <elasticsearch.version>0.90.1</elasticsearch.version>
   </properties>
 
