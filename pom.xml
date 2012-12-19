@@ -547,8 +547,8 @@ limitations under the License.
           <version>0.7</version>
           <executions>
             <execution>
-              <id>test.rat</id>
-              <phase>test</phase>
+              <id>verify.rat</id>
+              <phase>verify</phase>
               <goals>
                 <goal>check</goal>
               </goals>
@@ -567,6 +567,7 @@ limitations under the License.
                   <!-- Exclude buildinfo files from RAT, since they're only used for CDH unit test aggregation. -->
                   <exclude>*buildinfo</exclude>
                   <exclude>**/*.avsc</exclude>
+                  <exclude>**/*.avro</exclude>
                   <exclude>**/docs/**</exclude>
                 </excludes>
               </configuration>
