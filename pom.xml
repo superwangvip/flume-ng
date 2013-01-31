@@ -180,6 +180,69 @@ limitations under the License.
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>site</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.8.1</version>
+            <executions>
+              <execution>
+                <id>javadoc-jar</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>aggregate-jar</goal>
+                </goals>
+                <configuration>
+                  <!-- switch on dependency-driven aggregation -->
+                  <includeDependencySources>true</includeDependencySources>
+                  
+                  <dependencySourceIncludes>
+                    <!-- include ONLY flume multi-module dependencies -->
+                    <dependencySourceInclude>org.apache.flume:*</dependencySourceInclude>
+                  </dependencySourceIncludes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-site-plugin</artifactId>
+              <version>3.1</version>
+              <inherited>false</inherited>
+              <configuration>
+                <siteDirectory>${project.basedir}/flume-ng-doc</siteDirectory>
+              </configuration>
+              <dependencies>
+              </dependencies>
+              <executions>
+                <execution>
+                  <id>flume-site</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>site</goal>
+                  </goals>
+                </execution>
+                <execution>
+                  <id>flume-site-dist</id>
+                  <phase>package</phase>
+                  <goals>
+                    <goal>stage</goal>
+                  </goals>
+                </execution>
+              </executions>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+    
+
   </profiles>
 
   <inceptionYear>2009</inceptionYear>
@@ -450,30 +513,9 @@ limitations under the License.
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
+        <inherited>false</inherited>
       </plugin>
 
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8.1</version>
-        <executions>
-          <execution>
-            <id>javadoc-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>aggregate-jar</goal>
-            </goals>
-            <configuration>
-              <!-- switch on dependency-driven aggregation -->
-              <includeDependencySources>true</includeDependencySources>
-
-              <dependencySourceIncludes>
-                <!-- include ONLY flume multi-module dependencies -->
-                <dependencySourceInclude>org.apache.flume:*</dependencySourceInclude>
-              </dependencySourceIncludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
 
     <pluginManagement>
@@ -511,6 +553,7 @@ limitations under the License.
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
           <version>0.7</version>
+          <inherited>false</inherited>
           <executions>
             <execution>
               <id>test.rat</id>
@@ -566,33 +609,6 @@ limitations under the License.
           <groupId>com.thoughtworks.paranamer</groupId>
           <artifactId>paranamer-maven-plugin</artifactId>
           <version>2.3</version>
-        </plugin>
-
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.1</version>
-          <configuration>
-            <siteDirectory>${project.basedir}/flume-ng-doc</siteDirectory>
-          </configuration>
-          <dependencies>
-          </dependencies>
-          <executions>
-            <execution>
-              <id>flume-site</id>
-              <phase>package</phase>
-              <goals>
-                <goal>site</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>flume-site-dist</id>
-              <phase>package</phase>
-              <goals>
-                <goal>stage</goal>
-              </goals>
-            </execution>
-          </executions>
         </plugin>
 
         <plugin>
