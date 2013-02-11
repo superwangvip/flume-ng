@@ -70,7 +70,21 @@ public enum SourceType {
    * @see org.apache.flume.source.SyslogUDPSource
    */
 
-  SYSLOGUDP("org.apache.flume.source.SyslogUDPSource");
+  SYSLOGUDP("org.apache.flume.source.SyslogUDPSource"),
+
+  /**
+   * HTTP Source
+   *
+   * @see org.apache.flume.source.http.HTTPSource
+   */
+  HTTP("org.apache.flume.source.http.HTTPSource"),
+
+  /**
+   * Spool directory source
+   *
+   * @see org.apache.flume.source.ThriftSource
+   */
+  THRIFT("org.apache.flume.source.ThriftSource");
 
   private final String sourceClassName;
 
