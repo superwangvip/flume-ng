@@ -567,6 +567,44 @@ sent to mem-channel-1, if its "AZ" then it goes to jdbc-channel-2 or if its
 "NY" then both. If the "State" header is not set or doesn't match any of the
 three, then it goes to mem-channel-1 which is designated as 'default'.
 
+The selector also supports optional channels. To specify optional channels for
+a header, the config parameter 'optional' is used in the following way:
+
+.. code-block:: properties
+
+  # channel selector configuration
+  agent_foo.sources.avro-AppSrv-source1.selector.type = multiplexing
+  agent_foo.sources.avro-AppSrv-source1.selector.header = State
+  agent_foo.sources.avro-AppSrv-source1.selector.mapping.CA = mem-channel-1
+  agent_foo.sources.avro-AppSrv-source1.selector.mapping.AZ = file-channel-2
+  agent_foo.sources.avro-AppSrv-source1.selector.mapping.NY = mem-channel-1 file-channel-2
+  agent_foo.sources.avro-AppSrv-source1.selector.optional.CA = mem-channel-1 file-channel-2
+  agent_foo.sources.avro-AppSrv-source1.selector.mapping.AZ = file-channel-2
+  agent_foo.sources.avro-AppSrv-source1.selector.default = mem-channel-1
+
+The selector will attempt to write to the required channels first and will fail
+the transaction if even one of these channels fails to consume the events. The
+transaction is reattempted on **all** of the channels. Once all required
+channels have consumed the events, then the selector will attempt to write to
+the optional channels. A failure by any of the optional channels to consume the
+event is simply ignored and not retried.
+
+If there is an overlap between the optional channels and required channels for a
+specific header, the channel is considered to be required, and a failure in the
+channel will cause the entire set of required channels to be retried. For
+instance, in the above example, for the header "CA" mem-channel-1 is considered
+to be a required channel even though it is marked both as required and optional,
+and a failure to write to this channel will cause that
+event to be retried on **all** channels configured for the selector.
+
+Note that if a header does not have any required channels, then the event will
+be written to the default channels and will be attempted to be written to the
+optional channels for that header. Specifying optional channels will still cause
+the event to be written to the default channels, if no required channels are
+specified. If no channels are designated as default and there are no required,
+the selector will attempt to write the events to the optional channels. Any
+failures are simply ignored in that case.
+
 
 Flume Sources
 -------------
@@ -579,17 +617,20 @@ When paired with the built-in AvroSink on another (previous hop) Flume agent,
 it can create tiered collection topologies.
 Required properties are in **bold**.
 
-==============  ===========  ===================================================
-Property Name   Default      Description
-==============  ===========  ===================================================
-**channels**    --
-**type**        --           The component type name, needs to be ``avro``
-**bind**        --           hostname or IP address to listen on
-**port**        --           Port # to bind to
-threads         --           Maximum number of worker threads to spawn
-interceptors    --           Space separated list of interceptors
+==================   ===========  ===================================================
+Property Name        Default      Description
+==================   ===========  ===================================================
+**channels**         --
+**type**             --           The component type name, needs to be ``avro``
+**bind**             --           hostname or IP address to listen on
+**port**             --           Port # to bind to
+threads              --           Maximum number of worker threads to spawn
+selector.type
+selector.*
+interceptors         --           Space separated list of interceptors
 interceptors.*
-==============  ===========  ===================================================
+compression-type     none         This can be "none" or "deflate".  The compression-type must match the compression-type of matching AvroSource
+==================   ===========  ===================================================
 
 Example for agent named **agent_foo**:
 
@@ -1062,17 +1103,19 @@ hostname / port pair. The events are taken from the configured Channel in
 batches of the configured batch size.
 Required properties are in **bold**.
 
-===============  =======  ==============================================
-Property Name    Default  Description
-===============  =======  ==============================================
-**channel**      --
-**type**         --       The component type name, needs to be ``avro``.
-**hostname**     --       The hostname or IP address to bind to.
-**port**         --       The port # to listen on.
-batch-size       100      number of event to batch together for send.
-connect-timeout  20000    Amount of time (ms) to allow for the first (handshake) request.
-request-timeout  20000    Amount of time (ms) to allow for requests after the first.
-===============  =======  ==============================================
+===================   =======  ==============================================
+Property Name         Default  Description
+===================   =======  ==============================================
+**channel**           --
+**type**              --       The component type name, needs to be ``avro``.
+**hostname**          --       The hostname or IP address to bind to.
+**port**              --       The port # to listen on.
+batch-size            100      number of event to batch together for send.
+connect-timeout       20000    Amount of time (ms) to allow for the first (handshake) request.
+request-timeout       20000    Amount of time (ms) to allow for requests after the first.
+compression-type      none     This can be "none" or "deflate".  The compression-type must match the compression-type of matching AvroSource
+compression-level     6	       The level of compression to compress event. 0 = no compression and 1-9 is compression.  The higher the number the more compression
+===================   =======  ==============================================
 
 Example for agent named **agent_foo**:
 
