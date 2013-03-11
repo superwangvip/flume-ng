@@ -608,6 +608,7 @@ limitations under the License.
                   <exclude>**/*.avsc</exclude>
                   <exclude>**/*.avro</exclude>
                   <exclude>**/docs/**</exclude>
+                  <exclude>**/test/resources/test_command.txt</exclude>
                 </excludes>
               </configuration>
             </execution>
