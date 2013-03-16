@@ -42,6 +42,7 @@ limitations under the License.
     <siteUrlDeployment>file://people.apache.org/www/incubator.apache.org/flume</siteUrlDeployment>
     <stagingDirectory>${project.basedir}/target/docs</stagingDirectory>
 
+    <javaVersion>1.6</javaVersion>
   </properties>
 
   <modules>
@@ -428,7 +429,7 @@ limitations under the License.
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    
+
     <repository>
       <id>cdh.snapshots.repo</id>
       <url>https://repository.cloudera.com/artifactory/libs-snapshot-local</url>
@@ -505,6 +506,44 @@ limitations under the License.
                 <dependencySourceInclude>org.apache.flume:*</dependencySourceInclude>
               </dependencySourceIncludes>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <inherited>false</inherited>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>[3.0.0,)</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>[${javaVersion}.0,${javaVersion}.1000}]</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+        <executions>
+          <execution>
+            <id>clean</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>pre-clean</phase>
+          </execution>
+          <execution>
+            <id>default</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>validate</phase>
+          </execution>
+          <execution>
+            <id>site</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <phase>pre-site</phase>
           </execution>
         </executions>
       </plugin>
@@ -644,6 +683,12 @@ limitations under the License.
               </fileset>
             </filesets>
           </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>1.0</version>
         </plugin>
       </plugins>
 
