@@ -148,14 +148,15 @@ supported by Flume. The application can simply call ``append()`` or
 exchanges.
 
 
-Avro RPC Client
-'''''''''''''''
+RPC clients - Avro and Thrift
+'''''''''''''''''''''''''''''
 
-As of Flume 1.1.0, Avro is the only support RPC protocol.  The
-``NettyAvroRpcClient`` implements the ``RpcClient`` interface. The client needs
-to create this object with the host and port of the Flume agent and use it to
-send data into flume. The following example shows how to use the Client SDK
-API:
+As of Flume 1.4.0, Avro is the default RPC protocol.  The
+``NettyAvroRpcClient`` and ``ThriftRpcClient`` implement the ``RpcClient``
+interface. The client needs to create this object with the host and port of
+the target Flume agent, and canthen use the ``RpcClient`` to send data into
+the agent. The following example shows how to use the Flume Client SDK API
+within a user's data-generating application:
 
 .. code-block:: java
 
@@ -166,40 +167,113 @@ API:
   import org.apache.flume.api.RpcClientFactory;
   import org.apache.flume.event.EventBuilder;
 
-  public void myInit () {
-    // setup the RPC connection to Flume agent at hostname/port
-    RpcClient rpcClient = RpcClientFactory.getDefaultInstance(hostname, port);
-    ...
-  }
+  public class MyApp {
+    public static void main(String[] args) {
+      MyRpcClientFacade client = new MyRpcClientFacade();
+      // Initialize client with the remote Flume agent's host and port
+      client.init("host.example.org", 41414);
 
-  public void sendDataToFlume(String data) {
-    // Create flume event object
-    Event event = EventBuilder.withBody(data, Charset.forName("UTF-8"));
-    try {
-        rpcClient.append(event);
-    } catch (EventDeliveryException e) {
-        // clean up and recreate rpcClient
-        rpcClient.close();
-        rpcClient = null;
-        rpcClient = RpcClientFactory.getDefaultInstance(hostname, port);
+      // Send 10 events to the remote Flume agent. That agent should be
+      // configured to listen with an AvroSource.
+      String sampleData = "Hello Flume!";
+      for (int i = 0; i < 10; i++) {
+        client.sendDataToFlume(sampleData);
+      }
+
+      client.cleanUp();
     }
-    ...
   }
 
-  public void cleanUp () {
-    // close the rpc connection
-    rpcClient.close();
-    ...
+  class MyRpcClientFacade {
+    private RpcClient client;
+    private String hostname;
+    private int port;
+
+    public void init(String hostname, int port) {
+      // Setup the RPC connection
+      this.hostname = hostname;
+      this.port = port;
+      this.client = RpcClientFactory.getDefaultInstance(hostname, port);
+      // Use the following method to create a thrift client (instead of the above line):
+      // this.client = RpcClientFactory.getThriftInstance(hostname, port);
+    }
+
+    public void sendDataToFlume(String data) {
+      // Create a Flume Event object that encapsulates the sample data
+      Event event = EventBuilder.withBody(data, Charset.forName("UTF-8"));
+
+      // Send the event
+      try {
+        client.append(event);
+      } catch (EventDeliveryException e) {
+        // clean up and recreate the client
+        client.close();
+        client = null;
+        client = RpcClientFactory.getDefaultInstance(hostname, port);
+        // Use the following method to create a thrift client (instead of the above line):
+        // this.client = RpcClientFactory.getThriftInstance(hostname, port);
+      }
+    }
+
+    public void cleanUp() {
+      // Close the RPC connection
+      client.close();
+    }
+
   }
+
+The remote Flume agent needs to have an ``AvroSource`` (or a
+``ThriftSource`` if you are using a Thrift client) listening on some port.
+Below is an example Flume agent configuration that's waiting for a connection
+from MyApp:
+
+.. code-block:: properties
+
+  a1.channels = c1
+  a1.sources = r1
+  a1.sinks = k1
+
+  a1.channels.c1.type = memory
+
+  a1.sources.r1.channels = c1
+  a1.sources.r1.type = avro
+  # For using a thrift source set the following instead of the above line.
+  # a1.source.r1.type = thrift
+  a1.sources.r1.bind = 0.0.0.0
+  a1.sources.r1.port = 41414
+
+  a1.sinks.k1.channel = c1
+  a1.sinks.k1.type = logger
+
+For more flexibility, the default Flume client implementations
+(``NettyAvroRpcClient`` and ``ThriftRpcClient``) can be configured with these
+properties:
+
+.. code-block:: properties
+
+  client.type = default (for avro) or thrift (for thrift)
+
+  hosts = h1                           # default client accepts only 1 host
+                                       # (additional hosts will be ignored)
+
+  hosts.h1 = host1.example.org:41414   # host and port must both be specified
+                                       # (neither has a default)
+
+  batch-size = 100                     # Must be >=1 (default: 100)
+
+  connect-timeout = 20000              # Must be >=1000 (default: 20000)
 
 
 Failover handler
 ''''''''''''''''
 
-This class wraps the Avro RPC client to provide failover handling capability to
-clients. This takes a list of host/ports of the Flume agent. If there’s an
-error in communicating the current agent, then it automatically falls back to
-the next agent in the list:
+This class wraps the default Avro RPC client to provide failover handling
+capability to clients. This takes a whitespace-separated list of <host>:<port>
+representing the Flume agents that make-up a failover group. The Failover RPC
+Client currently does not support thrift. If there’s a
+communication error with the currently selected host (i.e. agent) agent,
+then the failover client automatically fails-over to the next host in the list.
+For example:
 
 .. code-block:: java
 
@@ -216,8 +290,205 @@ the next agent in the list:
   props.put("hosts.host1", host3 + ":" + port3);
 
   // create the client with failover properties
-  client = (FailoverRpcClient);
-  RpcClientFactory.getInstance(props);
+  RpcClient client = RpcClientFactory.getInstance(props);
+
+For more flexibility, the failover Flume client implementation
+(``FailoverRpcClient``) can be configured with these properties:
+
+.. code-block:: properties
+
+  client.type = default_failover
+
+  hosts = h1 h2 h3                     # at least one is required, but 2 or
+                                       # more makes better sense
+
+  hosts.h1 = host1.example.org:41414
+
+  hosts.h2 = host2.example.org:41414
+
+  hosts.h3 = host3.example.org:41414
+
+  max-attempts = 3                     # Must be >=0 (default: number of hosts
+                                       # specified, 3 in this case). A '0'
+                                       # value doesn't make much sense because
+                                       # it will just cause an append call to
+                                       # immmediately fail. A '1' value means
+                                       # that the failover client will try only
+                                       # once to send the Event, and if it
+                                       # fails then there will be no failover
+                                       # to a second client, so this value
+                                       # causes the failover client to
+                                       # degenerate into just a default client.
+                                       # It makes sense to set this value to at
+                                       # least the number of hosts that you
+                                       # specified.
+
+  batch-size = 100                     # Must be >=1 (default: 100)
+
+  connect-timeout = 20000              # Must be >=1000 (default: 20000)
+
+  request-timeout = 20000              # Must be >=1000 (default: 20000)
+
+LoadBalancing RPC client
+''''''''''''''''''''''''
+
+The Flume Client SDK also supports an RpcClient which load-balances among
+multiple hosts. This type of client takes a whitespace-separated list of
+<host>:<port> representing the Flume agents that make-up a load-balancing group.
+This client can be configured with a load balancing strategy that either
+randomly selects one of the configured hosts, or selects a host in a round-robin
+fashion. You can also specify your own custom class that implements the
+``LoadBalancingRpcClient$HostSelector`` interface so that a custom selection
+order is used. In that case, the FQCN of the custom class needs to be specified
+as the value of the ``host-selector`` property. The LoadBalancing RPC Client
+currently does not support thrift.
+
+If ``backoff`` is enabled then the client will temporarily blacklist
+hosts that fail, causing them to be excluded from being selected as a failover
+host until a given timeout. When the timeout elapses, if the host is still
+unresponsive then this is considered a sequential failure, and the timeout is
+increased exponentially to avoid potentially getting stuck in long waits on
+unresponsive hosts.
+
+The maximum backoff time can be configured by setting ``maxBackoff`` (in
+milliseconds). The maxBackoff default is 30 seconds (specified in the
+``OrderSelector`` class that's the superclass of both load balancing
+strategies). The backoff timeout will increase exponentially with each
+sequential failure up to the maximum possible backoff timeout.
+The maximum possible backoff is limited to 65536 seconds (about 18.2 hours).
+For example:
+
+.. code-block:: java
+
+  // Setup properties for the load balancing
+  Properties props = new Properties();
+  props.put("client.type", "default_loadbalance");
+
+  // List of hosts (space-separated list of user-chosen host aliases)
+  props.put("hosts", "h1 h2 h3");
+
+  // host/port pair for each host alias
+  String host1 = "host1.example.org:41414";
+  String host2 = "host2.example.org:41414";
+  String host3 = "host3.example.org:41414";
+  props.put("hosts.h1", host1);
+  props.put("hosts.h2", host2);
+  props.put("hosts.h3", host3);
+
+  props.put("host-selector", "random"); // For random host selection
+  // props.put("host-selector", "round_robin"); // For round-robin host
+  //                                            // selection
+  props.put("backoff", "true"); // Disabled by default.
+
+  props.put("maxBackoff", "10000"); // Defaults 0, which effectively
+                                    // becomes 30000 ms
+
+  // Create the client with load balancing properties
+  RpcClient client = RpcClientFactory.getInstance(props);
+
+For more flexibility, the load-balancing Flume client implementation
+(``LoadBalancingRpcClient``) can be configured with these properties:
+
+.. code-block:: properties
+
+  client.type = default_loadbalance
+
+  hosts = h1 h2 h3                     # At least 2 hosts are required
+
+  hosts.h1 = host1.example.org:41414
+
+  hosts.h2 = host2.example.org:41414
+
+  hosts.h3 = host3.example.org:41414
+
+  backoff = false                      # Specifies whether the client should
+                                       # back-off from (i.e. temporarily
+                                       # blacklist) a failed host
+                                       # (default: false).
+
+  maxBackoff = 0                       # Max timeout in millis that a will
+                                       # remain inactive due to a previous
+                                       # failure with that host (default: 0,
+                                       # which effectively becomes 30000)
+
+  host-selector = round_robin          # The host selection strategy used
+                                       # when load-balancing among hosts
+                                       # (default: round_robin).
+                                       # Other values are include "random"
+                                       # or the FQCN of a custom class
+                                       # that implements
+                                       # LoadBalancingRpcClient$HostSelector
+
+  batch-size = 100                     # Must be >=1 (default: 100)
+
+  connect-timeout = 20000              # Must be >=1000 (default: 20000)
+
+  request-timeout = 20000              # Must be >=1000 (default: 20000)
+
+Embedded agent
+~~~~~~~~~~~~~~
+
+Flume has an embedded agent api which allows users to embed an agent in their
+application. This agent is meant to be lightweight and as such not all
+sources, sinks, and channels are allowed. Specifically the source used
+is a special embedded source and events should be send to the source
+via the put, putAll methods on the EmbeddedAgent object. Only File Channel
+and Memory Channel are allowed as channels while Avro Sink is the only
+supported sink.
+
+Note: The embedded agent has a dependency on hadoop-core.jar.
+
+Configuration of an Embedded Agent is similar to configuration of a
+full Agent. The following is an exhaustive list of configration options:
+
+Required properties are in **bold**.
+
+====================  ================  ==============================================
+Property Name         Default           Description
+====================  ================  ==============================================
+source.type           embedded          The only available source is the embedded source.
+**channel.type**      --                Either ``memory`` or ``file`` which correspond to MemoryChannel and FileChannel respectively.
+channel.*             --                Configuration options for the channel type requested, see MemoryChannel or FileChannel user guide for an exhaustive list.
+**sinks**             --                List of sink names
+**sink.type**         --                Property name must match a name in the list of sinks. Value must be ``avro``
+sink.*                --                Configuration options for the sink. See AvroSink user guide for an exhaustive list, however note AvroSink requires at least hostname and port.
+**processor.type**    --                Either ``failover`` or ``load_balance`` which correspond to FailoverSinksProcessor and LoadBalancingSinkProcessor respectively.
+processor.*           --                Configuration options for the sink processor selected. See FailoverSinksProcessor and LoadBalancingSinkProcessor user guide for an exhaustive list.
+====================  ================  ==============================================
+
+Below is an example of how to use the agent:
+
+.. code-block:: java
+
+    Map<String, String> properties = new HashMap<String, String>();
+    properties.put("channel.type", "memory");
+    properties.put("channel.capacity", "200");
+    properties.put("sinks", "sink1 sink2");
+    properties.put("sink1.type", "avro");
+    properties.put("sink2.type", "avro");
+    properties.put("sink1.hostname", "collector1.apache.org");
+    properties.put("sink1.port", "5564");
+    properties.put("sink2.hostname", "collector2.apache.org");
+    properties.put("sink2.port",  "5565");
+    properties.put("processor.type", "load_balance");
+
+    EmbeddedAgent agent = new EmbeddedAgent("myagent");
+
+    agent.configure(properties);
+    agent.start();
+
+    List<Event> events = Lists.newArrayList();
+
+    events.add(event);
+    events.add(event);
+    events.add(event);
+    events.add(event);
+
+    agent.putAll(events);
+
+    ...
+
+    agent.stop();
 
 
 Transaction interface
@@ -280,8 +551,12 @@ configuration settings:
   public class FooSink extends AbstractSink implements Configurable {
     @Override
     public void configure(Context context) {
-      some_Param = context.get("some_param", String.class);
-      // process some_param …
+      String myProp = context.getString("myProp", "defaultValue");
+
+      // Process the myProp value (e.g. validation)
+
+      // Store myProp for later retrieval by process() method
+      this.myProp = myProp;
     }
     @Override
     public void start() {
