@@ -798,7 +798,7 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.thrift</groupId>
         <artifactId>libthrift</artifactId>
-        <version>0.7.0</version>
+        <version>${cdh.thrift.version}</version>
         <exclusions>
           <exclusion>
             <groupId>javax.servlet</groupId>
