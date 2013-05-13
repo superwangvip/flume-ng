@@ -70,6 +70,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.apache.zookeeper</groupId>
+      <artifactId>zookeeper</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.hbase</groupId>
       <artifactId>asynchbase</artifactId>
     </dependency>

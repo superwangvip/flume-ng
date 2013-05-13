@@ -933,6 +933,10 @@ limitations under the License.
             <groupId>com.cloudera.cdh</groupId>
             <artifactId>zookeeper-ant</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
 
@@ -947,7 +951,17 @@ limitations under the License.
             <groupId>com.cloudera.cdh</groupId>
             <artifactId>zookeeper-ant</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+          </exclusion>
         </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>${cdh.zookeeper.version}</version>
       </dependency>
 
       <dependency>
@@ -1137,6 +1151,10 @@ limitations under the License.
           <exclusion>
             <groupId>org.jboss.netty</groupId>
             <artifactId>netty</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
