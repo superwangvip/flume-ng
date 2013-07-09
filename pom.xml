@@ -48,7 +48,7 @@ limitations under the License.
 
     <avro.version>${cdh.avro.version}</avro.version>
     <elasticsearch.version>0.90.1</elasticsearch.version>
-    <javaVersion>1.6</javaVersion>
+    <javaVersion>1.7</javaVersion>
   </properties>
 
   <modules>
