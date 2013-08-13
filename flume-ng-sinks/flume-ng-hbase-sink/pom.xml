@@ -57,19 +57,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.apache.hbase</groupId>
-      <artifactId>hbase-client</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.hbase</groupId>
-      <artifactId>hbase-client</artifactId>
-      <classifier>tests</classifier>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
     </dependency>
@@ -123,7 +110,6 @@
       <groupId>org.apache.flume.flume-ng-sinks</groupId>
       <artifactId>flume-hdfs-sink</artifactId>
     </dependency>
-
   </dependencies>
 
   <profiles>
@@ -164,6 +150,75 @@
           <scope>test</scope>
         </dependency>
       </dependencies>
+    </profile>
+    <profile>
+      <id>hadoop-cdh5</id>
+      <activation>
+        <property>
+          <name>hadoop.profile</name>
+          <value>cdh5</value>
+        </property>
+      </activation>
+      <properties>
+        <hadoop.version>${cdh.hadoop.version}</hadoop.version>
+        <hbase.version>${cdh.hbase.version}</hbase.version>
+        <hadoop.common.artifact.id>hadoop-common</hadoop.common.artifact.id>
+        <thrift.version>${cdh.thrift.version}</thrift.version>
+      </properties>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-minicluster</artifactId>
+            <version>${hadoop.version}</version>
+          </dependency>
+
+
+          <!-- Ideally this should be optional, but making it optional causes
+          build to fail.
+          -->
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <!--<scope>optional</scope>-->
+          </dependency>
+
+
+          <!-- Ideally this should be optional, but making it optional causes
+          build to fail. Well, technically it should not even be needed.
+          -->
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-common</artifactId>
+            <!--<scope>optional</scope>-->
+          </dependency>
+
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+          </dependency>
+
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-common</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+          </dependency>
+
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-server</artifactId>
+            <scope>test</scope>
+          </dependency>
+
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-server</artifactId>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+          </dependency>
+        </dependencies>
     </profile>
   </profiles>
 
