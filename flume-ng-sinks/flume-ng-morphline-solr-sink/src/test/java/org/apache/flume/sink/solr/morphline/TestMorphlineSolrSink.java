@@ -46,6 +46,7 @@ import org.apache.solr.common.SolrDocument;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,7 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.io.Files;
 
+@Ignore
 public class TestMorphlineSolrSink extends SolrTestCaseJ4 {
 
   private EmbeddedSource source;
