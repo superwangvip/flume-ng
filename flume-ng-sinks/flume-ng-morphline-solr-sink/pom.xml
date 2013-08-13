@@ -62,19 +62,6 @@ limitations under the License.
     </repository>
   </repositories>
 
-  <dependencyManagement>
-    <dependencies>
-
-      <!-- override top-level CDH pom lucene-core-3.6.1 dep for Hadoop unit tests -->
-      <dependency>
-        <groupId>org.apache.lucene</groupId>
-        <artifactId>lucene-core</artifactId>
-        <version>4.3.0</version>
-      </dependency>
-
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
 
     <dependency>
