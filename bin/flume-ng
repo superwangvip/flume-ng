@@ -151,6 +151,9 @@ add_HBASE_paths() {
         if [[ $PIECE =~ slf4j-(api|log4j12).*\.jar ]]; then
           info "Excluding $PIECE from classpath"
           continue
+        elif [[ -n $opt_disable_zoo_cfg && $PIECE =~ zookeeper/conf$ ]]; then
+          info "Excluding $PIECE from classpath due to --disable-zoo-cfg flag"
+          continue
         else
           FLUME_CLASSPATH="$FLUME_CLASSPATH:$PIECE"
         fi
@@ -183,6 +186,9 @@ global options:
   --conf,-c <conf>      use configs in <conf> directory
   --classpath,-C <cp>   append to the classpath
   --dryrun,-d           do not actually start Flume, just print the command
+  --disable-zoo-cfg     do not import zookeeper/conf from the HBase classpath.
+                        this works around an issue where zoo.cfg overrides
+                        hbase-site.xml for zookeeper quorum info on CDH4.
   --plugins-path <dirs> colon-separated list of plugins.d directories. See the
                         plugins.d section in the user guide for more details.
                         Default: \$FLUME_HOME/plugins.d
@@ -244,6 +250,7 @@ opt_plugins_dirs=""
 arr_java_props=()
 arr_java_props_ct=0
 opt_dryrun=""
+opt_disable_zoo_cfg=""
 
 mode=$1
 shift
@@ -296,6 +303,9 @@ while [ -n "$*" ] ; do
       ;;
     --dryrun|-d)
       opt_dryrun="1"
+      ;;
+    --disable-zoo-cfg)
+      opt_disable_zoo_cfg="1"
       ;;
     --plugins-path)
       opt_plugins_dirs=$1
