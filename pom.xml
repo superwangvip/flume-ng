@@ -47,7 +47,7 @@ limitations under the License.
     <stagingDirectory>${project.basedir}/target/docs</stagingDirectory>
 
     <avro.version>${cdh.avro.version}</avro.version>
-    <elasticsearch.version>0.90.3</elasticsearch.version>
+    <elasticsearch.version>0.90.1</elasticsearch.version>
     <javaVersion>1.6</javaVersion>
   </properties>
 
@@ -1174,7 +1174,7 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.solr</groupId>
         <artifactId>solr-cell</artifactId>
-        <version>4.4.0</version>
+        <version>4.3.0</version>
       </dependency>
 
     </dependencies>
