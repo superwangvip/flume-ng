@@ -267,6 +267,23 @@ limitations under the License.
             <scope>test</scope>
           </dependency>
 
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-hadoop-compat</artifactId>
+            <version>${cdh.hbase.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+          </dependency>
+
+          <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-hadoop2-compat</artifactId>
+            <version>${cdh.hbase.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+          </dependency>
+
+
         </dependencies>
       </dependencyManagement>
     </profile>
