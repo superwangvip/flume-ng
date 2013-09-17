@@ -34,7 +34,6 @@
   <dependencySets>
     <dependencySet>
       <outputDirectory>lib</outputDirectory>
-      <outputFileNameMapping>${artifact.artifactId}-${project.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       <unpack>false</unpack>
       <useProjectArtifact>false</useProjectArtifact>
       <excludes>
@@ -43,7 +42,6 @@
     </dependencySet>
     <dependencySet>
       <outputDirectory>tools</outputDirectory>
-      <outputFileNameMapping>${artifact.artifactId}-${project.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       <unpack>false</unpack>
       <useProjectArtifact>false</useProjectArtifact>
       <includes>
