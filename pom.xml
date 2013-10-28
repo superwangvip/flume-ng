@@ -1073,7 +1073,7 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.flume.flume-ng-sources</groupId>
         <artifactId>flume-twitter-source</artifactId>
-        <version>1.5.0-SNAPSHOT</version>
+        <version>1.4.0-cdh4.5.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
