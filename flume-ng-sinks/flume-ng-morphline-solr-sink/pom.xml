@@ -33,8 +33,7 @@ limitations under the License.
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <solr.version>${cdh.solr.version}</solr.version>
     <solr.expected.version>4.3.0</solr.expected.version> <!-- sanity check to verify we actually run against the expected version rather than some outdated version -->
-    <cdk.version>${cdh.cdk.version}</cdk.version>
-    <kite.version>${cdh.cdk.version}</kite.version>
+    <kite.version>${cdh.kite.version}</kite.version>
     <slf4j.version>1.6.1</slf4j.version>
     <surefire.version>2.12.4</surefire.version>
   </properties>
