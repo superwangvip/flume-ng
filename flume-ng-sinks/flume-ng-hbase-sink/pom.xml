@@ -172,68 +172,11 @@
             <version>${hadoop.version}</version>
           </dependency>
 
-
-          <!-- Ideally this should be optional, but making it optional causes
-          build to fail.
-          -->
           <dependency>
             <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <!--<scope>optional</scope>-->
-          </dependency>
-
-
-          <!-- Ideally this should be optional, but making it optional causes
-          build to fail. Well, technically it should not even be needed.
-          -->
-          <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-common</artifactId>
-            <!--<scope>optional</scope>-->
-          </dependency>
-
-          <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-          </dependency>
-
-          <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-common</artifactId>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-          </dependency>
-
-          <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-server</artifactId>
-            <scope>test</scope>
-          </dependency>
-
-          <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-server</artifactId>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-          </dependency>
-          <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-hadoop-compat</artifactId>
+            <artifactId>hbase-testing-util</artifactId>
             <version>${cdh.hbase.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
           </dependency>
-
-          <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-hadoop2-compat</artifactId>
-            <version>${cdh.hbase.version}</version>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-          </dependency>
-
 
         </dependencies>
     </profile>
