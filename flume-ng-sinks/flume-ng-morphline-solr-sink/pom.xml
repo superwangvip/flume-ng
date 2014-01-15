@@ -31,9 +31,9 @@ limitations under the License.
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <solr.version>4.4.0</solr.version>
-    <solr.expected.version>4.4.0</solr.expected.version> <!-- sanity check to verify we actually run against the expected version rather than some outdated version -->
-    <cdk.version>0.8.1</cdk.version>
+    <solr.version>${cdh.solr.version}</solr.version>
+    <solr.expected.version>${cdh.solr.version}</solr.expected.version> <!-- sanity check to verify we actually run against the expected version rather than some outdated version -->
+    <cdk.version>0.9.1</cdk.version>
     <slf4j.version>1.6.1</slf4j.version>
     <surefire.version>2.12.4</surefire.version>
   </properties>
@@ -67,7 +67,7 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.lucene</groupId>
         <artifactId>lucene-core</artifactId>
-        <version>4.4.0</version>
+        <version>${solr.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
