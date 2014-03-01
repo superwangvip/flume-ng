@@ -735,7 +735,6 @@ limitations under the License.
             <excludes>
               <exclude>**/*$*</exclude>
               <exclude>${test.exclude.pattern}</exclude>
-              <exclude>**/TestAsyncHBaseSink.java</exclude>
             </excludes>
           </configuration>
         </plugin>
