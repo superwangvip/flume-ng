@@ -25,7 +25,7 @@ limitations under the License.
   <parent>
     <artifactId>flume-parent</artifactId>
     <groupId>org.apache.flume</groupId>
-    <version>1.5.0</version>
+    <version>1.5.0-cdh5.1.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.flume</groupId>
@@ -105,6 +105,37 @@ limitations under the License.
         <property>
           <name>hadoop.profile</name>
           <value>2</value>
+        </property>
+      </activation>
+      <dependencies>
+
+        <dependency>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-hdfs</artifactId>
+          <optional>true</optional>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-auth</artifactId>
+          <optional>true</optional>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-minicluster</artifactId>
+          <scope>test</scope>
+        </dependency>
+
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>hadoop-cdh5</id>
+      <activation>
+        <property>
+          <name>hadoop.profile</name>
+          <value>cdh5</value>
         </property>
       </activation>
       <dependencies>

@@ -22,7 +22,7 @@ limitations under the License.
   <parent>
     <artifactId>flume-parent</artifactId>
     <groupId>org.apache.flume</groupId>
-    <version>1.5.0</version>
+    <version>1.5.0-cdh5.1.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.flume</groupId>
@@ -146,10 +146,12 @@ limitations under the License.
                 <phase>generate-sources</phase>
                 <configuration>
                   <target>
+                    <property file = "${basedir}/../cloudera/build.properties" />
+                    <property name = "cloudera.hash" value = "" />
                     <mkdir dir="${project.build.directory}/generated-sources/java"/>
                     <exec executable="sh">
                       <arg
-                        line = "${basedir}/scripts/saveVersion.sh ${project.version} ${project.build.directory}" />
+                        line = "${basedir}/scripts/saveVersion.sh ${project.version} ${project.build.directory} ${cloudera.hash}" />
                     </exec>
                   </target>
                 </configuration>
