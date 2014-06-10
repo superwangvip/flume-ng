@@ -1356,7 +1356,7 @@ limitations under the License.
       <dependency>
         <groupId>org.kitesdk</groupId>
         <artifactId>kite-data-core</artifactId>
-        <version>${kite.version}</version>
+        <version>${cdh.kite.version}</version>
       </dependency>
 
     </dependencies>
