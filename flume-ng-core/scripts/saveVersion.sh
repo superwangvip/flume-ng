@@ -29,7 +29,11 @@ user=`whoami`
 date=`date`
 dir=`pwd`
 cwd=`dirname $dir`
-if [ -d ../.svn ]; then
+if [ -n "${COMPONENT_HASH}" ]; then
+  revision="${COMPONENT_HASH}"
+  url="http://github.com/cloudera/flume-ng"
+  branch="Unkown"
+elif [ -d ../.svn ]; then
   if [ "$revision" = "" ]; then
     revision=`svn info ../ | sed -n -e 's/Last Changed Rev: \(.*\)/\1/p'`
   fi
