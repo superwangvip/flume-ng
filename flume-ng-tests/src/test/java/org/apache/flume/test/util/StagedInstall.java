@@ -92,6 +92,7 @@ public class StagedInstall {
 
     LOGGER.info("Shutting down agent process");
     process.destroy();
+    process.waitFor();
     process = null;
     consumer.interrupt();
     consumer = null;
@@ -160,6 +161,7 @@ public class StagedInstall {
     Map<String, String> env = pb.environment();
 
     LOGGER.debug("process environment: " + env);
+
     pb.directory(baseDir);
     pb.redirectErrorStream(true);
 
