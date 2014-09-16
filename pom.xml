@@ -1226,7 +1226,7 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.flume.flume-ng-sinks</groupId>
         <artifactId>flume-ng-kafka-sink</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.5.0-cdh5.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
