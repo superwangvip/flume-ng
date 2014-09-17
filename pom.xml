@@ -1256,7 +1256,7 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.flume.flume-ng-sources</groupId>
         <artifactId>flume-kafka-source</artifactId>
-        <version>1.6.0-SNAPSHOT</version>
+        <version>1.5.0-cdh5.2.0-SNAPSHOT</version>
       </dependency>
 
       <dependency>
