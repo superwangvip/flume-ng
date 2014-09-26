@@ -1404,7 +1404,7 @@ limitations under the License.
       </dependency>
       <dependency>
         <groupId>org.kitesdk</groupId>
-        <artifactId>kite-data-hcatalog</artifactId>
+        <artifactId>kite-data-hive</artifactId>
         <version>${cdh.kite.version}</version>
       </dependency>
       <dependency>
