@@ -49,6 +49,9 @@ limitations under the License.
     <avro.version>${cdh.avro.version}</avro.version>
     <elasticsearch.version>0.90.1</elasticsearch.version>
     <javaVersion>1.7</javaVersion>
+
+    <kite.version>0.15.0</kite.version>
+    <hive.version>0.10.0</hive.version>
   </properties>
 
   <modules>
@@ -1401,6 +1404,28 @@ limitations under the License.
         <groupId>org.kitesdk</groupId>
         <artifactId>kite-data-core</artifactId>
         <version>${cdh.kite.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kitesdk</groupId>
+        <artifactId>kite-data-hcatalog</artifactId>
+        <version>${kite.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kitesdk</groupId>
+        <artifactId>kite-data-hbase</artifactId>
+        <version>${kite.version}</version>
+      </dependency>
+
+      <!-- Dependency for kite-data-hive -->
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-exec</artifactId>
+        <version>${hive.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.hive</groupId>
+        <artifactId>hive-metastore</artifactId>
+        <version>${hive.version}</version>
       </dependency>
 
       <dependency>
