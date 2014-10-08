@@ -59,6 +59,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.kitesdk.data.Dataset;
 import org.kitesdk.data.DatasetDescriptor;
@@ -202,6 +203,7 @@ public class TestDatasetSink {
     Assert.assertEquals("Should have committed", 0, remaining(in));
   }
 
+  @Ignore("Ignore until Kite supports durable Parquet by default")
   @Test
   public void testParquetDataset() throws EventDeliveryException {
     Datasets.delete(FILE_DATASET_URI);
@@ -219,6 +221,28 @@ public class TestDatasetSink {
 
     Assert.assertEquals(Sets.newHashSet(expected), read(created));
     Assert.assertEquals("Should have committed", 0, remaining(in));
+  }
+
+  @Test
+  public void testParquetDatasetNotSupported() throws EventDeliveryException {
+    Datasets.delete(FILE_DATASET_URI);
+    Dataset<GenericRecord> created = Datasets.create(FILE_DATASET_URI,
+        new DatasetDescriptor.Builder(DESCRIPTOR)
+            .format("parquet")
+            .build());
+
+    assertThrows("Parquet is not supported", IllegalArgumentException.class,
+        new Callable() {
+
+      @Override
+      public Object call() throws Exception {
+        DatasetSink sink = sink(in, config);
+
+        sink.start();
+        sink.process();
+        return sink;
+      }
+    });
   }
 
   @Test
