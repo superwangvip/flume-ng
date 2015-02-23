@@ -151,7 +151,7 @@ public class DatasetSink extends AbstractSink implements Configurable {
    * @return The list of allowed formats.
    */
   protected List<String> allowedFormats() {
-    return Lists.newArrayList("avro");
+    return Lists.newArrayList("avro", "parquet");
   }
 
   @Override
