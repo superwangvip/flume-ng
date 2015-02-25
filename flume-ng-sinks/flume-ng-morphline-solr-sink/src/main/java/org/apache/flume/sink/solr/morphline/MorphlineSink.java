@@ -37,7 +37,7 @@ import org.kitesdk.morphline.api.Command;
  */
 public class MorphlineSink extends AbstractSink implements Configurable {
 
-  private int maxBatchSize = 1000;
+  private int maxBatchSize = 10000;
   private long maxBatchDurationMillis = 1000;
   private String handlerClass;
   private MorphlineHandler handler;
