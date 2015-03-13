@@ -105,6 +105,20 @@ limitations under the License.
           <scope>test</scope>
           <version>${hadoop.version}</version>
         </dependency>
+
+        <dependency>
+          <groupId>com.jolbox</groupId>
+          <artifactId>bonecp</artifactId>
+          <version>0.8.0.RELEASE</version>
+          <scope>test</scope>
+        </dependency>
+
+        <dependency>
+          <groupId>org.apache.hadoop</groupId>
+          <artifactId>hadoop-mapreduce-client-common</artifactId>
+          <version>${hadoop.version}</version>
+          <scope>test</scope>
+        </dependency>
       </dependencies>
     </profile>
   </profiles>
