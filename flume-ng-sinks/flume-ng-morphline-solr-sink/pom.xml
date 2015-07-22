@@ -21,19 +21,21 @@ limitations under the License.
   <parent>
     <artifactId>flume-ng-sinks</artifactId>
     <groupId>org.apache.flume</groupId>
-    <version>1.6.0</version>
+    <version>1.6.0-cdh5.5.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.apache.flume.flume-ng-sinks</groupId>
   <artifactId>flume-ng-morphline-solr-sink</artifactId>
-  <version>1.6.0</version>
+  <version>1.6.0-cdh5.5.0-SNAPSHOT</version>
   <name>Flume NG Morphline Solr Sink</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <solr.version>4.3.0</solr.version>
-    <solr.expected.version>4.3.0</solr.expected.version> <!-- sanity check to verify we actually run against the expected version rather than some outdated version -->
-    <slf4j.version>1.6.1</slf4j.version>
+    <solr.version>${cdh.solr.version}</solr.version>
+    <solr.expected.version>${cdh.solr.version}</solr.expected.version> <!-- sanity check to verify we actually run against the expected version rather than some outdated version -->
+    <tika.version>${cdh.tika.version}</tika.version>
+    <kite.version>${cdh.kite.version}</kite.version>
+    <slf4j.version>${cdh.slf4j.version}</slf4j.version>
     <surefire.version>2.12.4</surefire.version>
   </properties>
 

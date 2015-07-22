@@ -24,23 +24,34 @@ unset LC_CTYPE
 unset LC_TIME
 version=$1
 buildDirectory=$2
+revision=$3
 user=`whoami`
 date=`date`
 dir=`pwd`
 cwd=`dirname $dir`
-if [ -d ../.svn ]; then
-  revision=`svn info ../ | sed -n -e 's/Last Changed Rev: \(.*\)/\1/p'`
+if [ -n "${COMPONENT_HASH}" ]; then
+  revision="${COMPONENT_HASH}"
+  url="http://github.com/cloudera/flume-ng"
+  branch="Unkown"
+elif [ -d ../.svn ]; then
+  if [ "$revision" = "" ]; then
+    revision=`svn info ../ | sed -n -e 's/Last Changed Rev: \(.*\)/\1/p'`
+  fi
   url=`svn info  ../ | sed -n -e 's/URL: \(.*\)/\1/p'`
   branch=`echo $url | sed -n -e 's,.*\(branches/.*\)$,\1,p' \
                              -e 's,.*\(tags/.*\)$,\1,p' \
                              -e 's,.*trunk$,trunk,p'`
 elif git rev-parse HEAD 2>/dev/null > /dev/null ; then
-  revision=`git log -1 --pretty=format:"%H"`
+  if [ "$revision" = "" ]; then
+    revision=`git log -1 --pretty=format:"%H"`
+  fi
   hostname=`hostname`
   branch=`git branch | sed -n -e 's/^* //p'`
   url="git://${hostname}${cwd}"
 else
-  revision="Unknown"
+  if [ "$revision" = "" ]; then
+    revision="Unknown"
+  fi
   branch="Unknown"
   url="file://$cwd"
 fi

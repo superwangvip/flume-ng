@@ -160,6 +160,15 @@ add_HBASE_paths() {
 
   fi
 }
+add_search_paths() {
+  local SEARCH_LIBS=${SEARCH_HOME:-${FLUME_HOME}/../search}/lib
+
+  if [ -d "$SEARCH_LIBS" ]; then
+    for PIECE in $SEARCH_LIBS/*.jar ; do
+      FLUME_CLASSPATH="$FLUME_CLASSPATH:$PIECE"
+    done
+  fi
+}
 
 add_hive_paths(){
   if [ -d "${HIVE_HOME}/lib" ]; then
@@ -429,6 +438,7 @@ fi
 add_hadoop_paths
 add_HBASE_paths
 add_hive_paths
+add_search_paths
 
 # prepend conf dir to classpath
 if [ -n "$opt_conf" ]; then

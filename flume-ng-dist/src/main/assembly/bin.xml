@@ -85,6 +85,7 @@
         <include>RELEASE-NOTES</include>
         <include>bin/**</include>
         <include>conf/**</include>
+        <include>cloudera/**</include>
       </includes>
     </fileSet>
 
