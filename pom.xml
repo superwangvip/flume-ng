@@ -374,7 +374,7 @@ limitations under the License.
           <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-flume-sink_2.10</artifactId>
-            <version>1.3.0-cdh5.5.0-SNAPSHOT</version>
+            <version>${cdh.spark.version}</version>
           </dependency>
 
           <!-- only compatible with hadoop-2 -->
