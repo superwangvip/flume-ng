@@ -1458,12 +1458,12 @@ limitations under the License.
       <dependency>
         <groupId>org.apache.kafka</groupId>
         <artifactId>kafka_2.10</artifactId>
-        <version>0.8.1.1</version>
+        <version>${cdh.kafka.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.kafka</groupId>
         <artifactId>kafka_2.10</artifactId>
-        <version>0.8.1.1</version>
+        <version>${cdh.kafka.version}</version>
         <classifier>test</classifier>
         <scope>test</scope>
       </dependency>

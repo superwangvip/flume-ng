@@ -22,6 +22,7 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 import kafka.admin.AdminUtils;
+import kafka.utils.ZkUtils;
 import org.I0Itec.zkclient.ZkClient;
 import kafka.utils.ZKStringSerializer$;
 
@@ -39,7 +40,7 @@ public class KafkaSourceEmbeddedKafka {
     Properties props = new Properties();
     props.put("zookeeper.connect",zookeeper.getConnectString());
     props.put("broker.id","1");
-    KafkaConfig config = new KafkaConfig(props);
+    KafkaConfig config = new KafkaConfig(props, true);
     kafkaServer = new KafkaServerStartable(config);
     kafkaServer.startup();
     initProducer();
@@ -78,15 +79,12 @@ public class KafkaSourceEmbeddedKafka {
     // Create a ZooKeeper client
     int sessionTimeoutMs = 10000;
     int connectionTimeoutMs = 10000;
-    ZkClient zkClient = new ZkClient(zookeeper.getConnectString(),
-            sessionTimeoutMs, connectionTimeoutMs,
-            ZKStringSerializer$.MODULE$);
+    ZkUtils zkUtils = ZkUtils.apply(zookeeper.getConnectString(), sessionTimeoutMs, connectionTimeoutMs, false);
 
     int numPartitions = 1;
     int replicationFactor = 1;
     Properties topicConfig = new Properties();
-    AdminUtils.createTopic(zkClient, topicName, numPartitions,
-            replicationFactor, topicConfig);
+    AdminUtils.createTopic(zkUtils, topicName, numPartitions, replicationFactor, topicConfig);
   }
 
 }

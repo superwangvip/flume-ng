@@ -25,6 +25,7 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 import kafka.utils.ZKStringSerializer$;
+import kafka.utils.ZkUtils;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.flume.Context;
@@ -415,22 +416,18 @@ public class TestKafkaChannel {
     int numPartitions = 5;
     int sessionTimeoutMs = 10000;
     int connectionTimeoutMs = 10000;
-    ZkClient zkClient = new ZkClient(testUtil.getZkUrl(),
-      sessionTimeoutMs, connectionTimeoutMs,
-      ZKStringSerializer$.MODULE$);
+    ZkUtils zkUtils = ZkUtils.apply(testUtil.getZkUrl(), sessionTimeoutMs, connectionTimeoutMs, false);
 
     int replicationFactor = 1;
     Properties topicConfig = new Properties();
-    AdminUtils.createTopic(zkClient, topicName, numPartitions,
+    AdminUtils.createTopic(zkUtils, topicName, numPartitions,
       replicationFactor, topicConfig);
   }
 
   public static void deleteTopic(String topicName) {
     int sessionTimeoutMs = 10000;
     int connectionTimeoutMs = 10000;
-    ZkClient zkClient = new ZkClient(testUtil.getZkUrl(),
-      sessionTimeoutMs, connectionTimeoutMs,
-      ZKStringSerializer$.MODULE$);
-    AdminUtils.deleteTopic(zkClient, topicName);
+    ZkUtils zkUtils = ZkUtils.apply(testUtil.getZkUrl(), sessionTimeoutMs, connectionTimeoutMs, false);
+    AdminUtils.deleteTopic(zkUtils, topicName);
   }
 }
